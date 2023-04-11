@@ -25,7 +25,7 @@ export const globalNavigation = {
     this.navigationRef = navigationRef;
   },
 
-  goTop() {
+  resetToHomPage() {
     if (!this.navigation) {
       return;
     }

@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HomeScreen from '@/pages/workbench/home';
-import DetailScreen from '@/pages/workbench/detail';
+import WeclomePage from '@/pages/workbench/welcome/weclome';
+import HomePage from '@/pages/workbench/home';
+import DetailPage from '@/pages/workbench/detail';
 import {globalNavigation} from '@/utils/navigation';
 
 const {Navigator, Screen} = createNativeStackNavigator();
@@ -20,12 +21,13 @@ export const AppNavigator = () => {
   return (
     <NavigationContainer ref={navigationRef}>
       <Navigator
-        initialRouteName="Home"
+        initialRouteName="WeclomePage"
         screenOptions={{
           headerShown: false,
         }}>
-        <Screen name="Home" component={HomeScreen} />
-        <Screen name="Detail" component={DetailScreen} />
+        <Screen name="WeclomePage" component={WeclomePage} />
+        <Screen name="Home" component={HomePage} />
+        <Screen name="Detail" component={DetailPage} />
       </Navigator>
     </NavigationContainer>
   );

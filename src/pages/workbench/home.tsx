@@ -1,36 +1,54 @@
 import {FC, useEffect} from 'react';
-import {Text} from 'react-native';
 import styled from 'styled-components/native';
-import {observer} from 'mobx-react';
-import {Routes} from '@/assets/config';
+import { observer } from 'mobx-react';
 import {HomeProps} from '@/typings/workbench/home';
-import {globalNavigation} from '@/utils/navigation';
-import {useStore} from '@/store';
 import BlurBackground from '@/components/BlurBackground';
+import SearchBar from '@/components/SearchBar';
+import Read from '@/components/Read';
+import FooterIntro from '@/components/FooterIntro';
+import BookCase from '@/components/BookCase';
+import {useStore} from '@/store';
+import { getAlbumToChinese, getTrackToChinese } from '@/utils/fun';
 
 const HomeWrapper = styled.SafeAreaView`
-  align-items: center;
-  justify-content: center;
   flex: 1;
 `;
 
-const ButtonWrapper = styled.Button``;
-
-const Home: FC<Partial<HomeProps>> = props => {
-  const {navigation} = props;
-  const {homeStore} = useStore();
-  useEffect(() => {
-    // set globalNavigation
-    globalNavigation.setNavigation(navigation);
-  }, [navigation]);
+const Home: FC<Partial<HomeProps>> = () => {
+  const { homeStore} = useStore();
+  const { blurImg, setBlurImg, addAlbumList, bookList, get, getConfig } = homeStore;
+  useEffect(()=>{
+    getConfig();
+    get();
+  }, []);
   return (
     <HomeWrapper>
-      <BlurBackground url="https://images.vmartaw.com/2019/12/10/web.png" />
-      <Text>Home: {homeStore.time}</Text>
-      <ButtonWrapper
-        onPress={() => navigation.navigate(Routes.Detail, {id: 1})}
-        title="Jump"
+      <BlurBackground url={blurImg} />
+      <SearchBar
+        showLoading={false}
+        value={''}
+        // searchChange={searchChange}
+        // searchSubmit={searchInfo}
+        // searchCancel={loadCancleData}
       />
+      <Read />
+      <FooterIntro albums={getAlbumToChinese()} tracks={getTrackToChinese()} />
+      <BookCase
+        bookList={bookList}
+        snapToItem={index=>addAlbumList(index)}
+        beforeSnapToItem={index=>setBlurImg(index)}
+      />
+      {/*
+      <Shake />
+      {isDouYin && <DouYin />}
+      <BookCase
+        onRef={bookcase => (this.bookcase = bookcase)}
+        bookList={bookList}
+        snapToItem={snapToItem}
+        beforeSnapToItem={beforeSnapToItem}
+      />
+      <FooterIntro albums={getAlbumToChinese()} tracks={getTrackToChinese()} />
+      <Toast onRef={toast => (this.toast = toast)} /> */}
     </HomeWrapper>
   );
 };

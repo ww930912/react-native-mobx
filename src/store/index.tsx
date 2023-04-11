@@ -1,6 +1,9 @@
 import {createContext, useContext} from 'react';
 import {useLocalObservable} from 'mobx-react';
+import { configure } from 'mobx';
 import createStore from './store';
+
+configure({ enforceActions: 'never' });
 
 type StoreType = ReturnType<typeof createStore>;
 
