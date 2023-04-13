@@ -6,7 +6,7 @@ const Read = () => {
   return (
     <ViewWrapper
       onPress={() => {
-        globalNavigation.goTo('MusicDetailPage', {id: 1});
+        globalNavigation.goTo('Detail', {id: 1});
       }}>
       <ImageWrapper
         source={{uri: 'https://image.sredy.cn/read_white.png'}}

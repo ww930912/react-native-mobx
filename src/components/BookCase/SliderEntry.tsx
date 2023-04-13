@@ -22,7 +22,7 @@ const SliderEntry = (props: any) => {
       activeOpacity={1}
       style={styles.slideInnerContainer}
       onPress={() => {
-        globalNavigation.goTo('MusicDetailPage', {id: _id});
+        globalNavigation.goTo('Detail', {id: _id});
       }}>
       <View style={styles.shadow} />
       <View

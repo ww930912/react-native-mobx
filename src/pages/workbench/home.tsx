@@ -1,4 +1,4 @@
-import {FC, useEffect} from 'react';
+import {FC, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import { observer } from 'mobx-react';
 import {HomeProps} from '@/typings/workbench/home';
@@ -16,22 +16,26 @@ const HomeWrapper = styled.SafeAreaView`
 
 const Home: FC<Partial<HomeProps>> = () => {
   const { homeStore} = useStore();
-  const { blurImg, setBlurImg, addAlbumList, bookList, get, getConfig } = homeStore;
+  const { blurImg, setBlurImg, addAlbumList, bookList, get, getConfig, isRead, setSearchText, setBeforeBookList } = homeStore;
+  const [ val, setVal ] = useState('');
   useEffect(()=>{
     getConfig();
-    get();
+    get(true);
   }, []);
   return (
     <HomeWrapper>
       <BlurBackground url={blurImg} />
       <SearchBar
         showLoading={false}
-        value={''}
-        // searchChange={searchChange}
-        // searchSubmit={searchInfo}
-        // searchCancel={loadCancleData}
+        value={val}
+        onChangeText={value => setVal(value)}
+        onSubmitEditing={()=>{
+          setSearchText(val);
+          get(true);
+        }}
+        onClear={()=>setBeforeBookList()}
       />
-      <Read />
+      { isRead && <Read /> }
       <FooterIntro albums={getAlbumToChinese()} tracks={getTrackToChinese()} />
       <BookCase
         bookList={bookList}
