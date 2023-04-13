@@ -28,6 +28,7 @@ const AlbumInfo = (props: any) => {
               { props.uid &&  <UserContainerWrapper>
                 { props.uid.smallLogo && <UserImageWrapper source={{ uri: props.uid.smallLogo }} /> }
                 <UserTextWrapper numberOfLines={1}>{props.uid.nickname}</UserTextWrapper>
+                <UserTextWrapper numberOfLines={1}>共{props.len}集</UserTextWrapper>
               </UserContainerWrapper>}
             </RightWrapper>
           </HomeWrapper>

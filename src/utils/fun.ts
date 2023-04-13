@@ -84,8 +84,80 @@ const isIOS = () => {
 };
 
 
+
+// 获取当前可播放的url
+const getPlayUrl = (track) => {
+    let url = '';
+    if (Platform.OS === 'ios') {
+        if (track.play.aac164 ) {
+            url = track.play.aac164 || track.play.aac224;
+        } else if (track.download.accUrl) {
+            url = track.download.accUrl;
+        } else {
+            url = 'https://images.vmartaw.com/2018/12/29/music.mp3';
+        }
+    } else {
+        if (track.play.playUrl32 ) {
+            url = track.play.playUrl32 || track.play.playUrl64;
+        } else if (track.download.url) {
+            url = track.download.url;
+        } else {
+            url = 'https://images.vmartaw.com/2018/12/29/music.mp3';
+        }
+    }
+    if (url.indexOf('buy_key') > -1) {
+        url = 'https://images.vmartaw.com/2018/12/29/music.mp3';
+    }
+    return url;
+};
+
+
+//将音频转换成播放音频信息
+const arrToPlayTracks = (tracks) => {
+    let arr = [];
+    tracks.map(e => {
+        const url = getPlayUrl(e);
+        let artwork = '';
+        if (!e.hasOwnProperty('cover')){
+            artwork = 'https://image.sredy.cn/timg.jpeg';
+        } else {
+            if (e.cover.indexOf('dushu.io') > 0 || e.cover.indexOf('sredy.cn') > 0) {
+                artwork = e.cover;
+            } else {
+                artwork = `https://imagev2.xmcdn.com/${e.cover}!op_type=5&upload_type=album&device_type=ios&name=medium`;
+            }
+        }
+        arr.push({
+          duration: e.duration,
+          id: e._id + '',
+          url: url,
+          title: e.title,
+          artist: e.artist,
+          artwork: artwork,
+        });
+    });
+    return arr;
+};
+
+const runTime = (duration, progress) => {
+    let seconds = Math.ceil(duration * progress);
+    if (isNaN(seconds)) {
+        return '00:00';
+    }
+    return secondToDate(seconds);
+};
+
+const endTime = (duration, progress) => {
+    let seconds = Math.floor(duration * (1 - progress));
+    if (isNaN(seconds)) {
+        return '00:00';
+    }
+    return secondToDate(seconds);
+};
+
+
 export {
-    getAlbumToChinese, getTrackToChinese, getPageNo, secondToNum, secondToDate, isIOS,
+    getAlbumToChinese, getTrackToChinese, getPageNo, secondToNum, secondToDate, isIOS, arrToPlayTracks, runTime, endTime,
 };
 
 

@@ -1,10 +1,15 @@
-import { getAlbumById } from '@/api/album';
 import {makeAutoObservable} from 'mobx';
+import { getAlbumById } from '@/api/album';
+import TrackPlayer from 'react-native-track-player';
+import { arrToPlayTracks } from '@/utils/fun';
+import { RootStoreProps } from '@/store/store';
 
 class Detail {
   album: any = null;
-  tracks: [] = [];
-  constructor() {
+  tracks: any[] = [];
+  rootStore: RootStoreProps;
+  constructor(rootStore: RootStoreProps) {
+    this.rootStore = rootStore;
     makeAutoObservable(this, {}, { autoBind:
       true });
   }
@@ -13,8 +18,8 @@ class Detail {
     getAlbumById(id).then(res=>{
       const { data } = res.data;
       let allTracks = data.tracks;
-        allTracks.map(e=>{
-          e.isPlay = false;
+        allTracks.map((e, i)=>{
+          e.isPlay = i === 0 ? true : false;
           e.select = false;
           e.artist = data.uid && data.uid.nickname;
         });
@@ -25,9 +30,15 @@ class Detail {
       }
       this.album = data;
       this.tracks = allTracks;
+      // Note
+      const playTracks = arrToPlayTracks(allTracks);
+      this.rootStore.palyerStore.playTracks = playTracks;
+      this.rootStore.palyerStore.playTrack = playTracks[0];
+      //当前页面新增初始化播放信息
+      TrackPlayer.add(playTracks);
     })
     ;
   }
 }
 
-export const detailStore = new Detail();
+export default Detail;

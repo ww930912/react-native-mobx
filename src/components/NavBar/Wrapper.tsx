@@ -27,7 +27,7 @@ export const NavBarWrapper = styled.View`
 `;
 
 export const TitleWrapper = styled.Text`
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     color: #fff;
     width: 320px;

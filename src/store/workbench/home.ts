@@ -1,9 +1,10 @@
+import {makeAutoObservable} from 'mobx';
+import Carousel from 'react-native-snap-carousel';
 import { getAlbumList } from '@/api/album';
 import { getConfig } from '@/api/config';
 import { AlbumProps } from '@/typings/workbench/home';
 import { getPageNo } from '@/utils/fun';
-import {makeAutoObservable} from 'mobx';
-import Carousel from 'react-native-snap-carousel';
+import { RootStoreProps } from '@/store/store';
 
 class Home {
   pageNo: number =  1;
@@ -17,8 +18,10 @@ class Home {
   isDouYin: boolean = false;
   isRead: boolean = false;
   isSafe: boolean = false;
+  rootStore: RootStoreProps;
 
-  constructor() {
+  constructor(rootStore: RootStoreProps) {
+    this.rootStore = rootStore;
     makeAutoObservable(this, {}, { autoBind:
        true });
   }
@@ -104,4 +107,4 @@ class Home {
   }
 }
 
-export const homeStore = new Home();
+export default Home;
