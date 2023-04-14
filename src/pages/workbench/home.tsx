@@ -9,7 +9,7 @@ import FooterIntro from '@/components/FooterIntro';
 import BookCase from '@/components/BookCase';
 import {useStore} from '@/store';
 import { getAlbumToChinese, getTrackToChinese } from '@/utils/fun';
-import TrackPlayer, { Capability, Event } from 'react-native-track-player';
+import TrackPlayer, { Capability, Event, State } from 'react-native-track-player';
 import Loading from '@/components/Loading';
 
 const HomeWrapper = styled.SafeAreaView`
@@ -19,27 +19,38 @@ const HomeWrapper = styled.SafeAreaView`
 const Home: FC<Partial<HomeProps>> = () => {
   const { rootStore} = useStore();
   const { blurImg, setBlurImg, addAlbumList, bookList, get, getConfig, isRead, setSearchText, setBeforeBookList } = rootStore.homeStore;
-  // const { setPlayState } = rootStore.palyerStore;
+  const { updateList } = rootStore.palyerStore;
   const [ val, setVal ] = useState('');
   // 播放器回调
   const initPlayEvent = async() => {
+    // 远程暂停播放
     TrackPlayer.addEventListener(Event.RemoteStop, () => {
-        console.log('播放终止---------home');
         TrackPlayer.reset();
     });
-
-    TrackPlayer.addEventListener(Event.RemotePlay, async() => {
-      console.log('播放---------home');
-      await TrackPlayer.play();
-    //   const { playTrack } = this.props;
-    //   this.updateTrackListState(playTrack.id);
-    });
-
     TrackPlayer.addEventListener(Event.RemotePause, async() => {
-      console.log('暂停---------home');
       await TrackPlayer.pause();
-    //   const { playTrack } = this.props;
-    //   this.updateTrackListState(playTrack.id);
+      const trackIndex = await TrackPlayer.getCurrentTrack();
+      const track = await TrackPlayer.getTrack(trackIndex);
+      track && updateList(track.id, State.Paused);
+    });
+    TrackPlayer.addEventListener(Event.RemotePlay, async() => {
+      await TrackPlayer.play();
+      const trackIndex = await TrackPlayer.getCurrentTrack();
+      const track = await TrackPlayer.getTrack(trackIndex);
+      track && updateList(track.id, State.Playing);
+    });
+    // 本地暂停播放
+    TrackPlayer.addEventListener(Event.PlaybackState, async ({state}) => {
+      const trackIndex = await TrackPlayer.getCurrentTrack();
+      const track = await TrackPlayer.getTrack(trackIndex);
+      if (state === State.Paused) {
+        await TrackPlayer.pause();
+        track && updateList(track.id, State.Paused);
+      } else if (state === State.Playing) {
+        await TrackPlayer.play();
+        track && updateList(track.id, State.Playing);
+      }
+      console.log('播放状态---', state);
     });
 
     TrackPlayer.addEventListener(Event.RemoteNext, async() => {
@@ -62,22 +73,13 @@ const Home: FC<Partial<HomeProps>> = () => {
         }
     });
 
-    TrackPlayer.addEventListener(Event.PlaybackState, ({state}) => {
-        // state 的状态 播放中 3 暂停 2
-        // const { setPlayState } = this.props;
-        // setPlayState(state);
-        console.log('播放状态---', state);
-    });
-
-    TrackPlayer.addEventListener(Event.PlaybackTrackChanged, async() => {
-        const trackId = await TrackPlayer.getCurrentTrack();
-        console.log('播放改变---------------------start----home---', trackId);
-        // this.updateTrackListState(trackId);
-        console.log('播放改变---------------------end----home');
-    });
+    // TrackPlayer.addEventListener(Event.PlaybackTrackChanged, async() => {
+    //     const trackIndex = await TrackPlayer.getCurrentTrack();
+    //     const track = await TrackPlayer.getTrack(trackIndex);
+    //     track && updateList(+track.id);
+    // });
 
     TrackPlayer.addEventListener(Event.RemoteSeek, async (data) => {
-        console.log('播放进度条移动---------home');
         await TrackPlayer.seekTo(data.position);
         // const { playBack } = this.props;
         // if (playBack === TrackPlayer. STATE_PAUSED) {

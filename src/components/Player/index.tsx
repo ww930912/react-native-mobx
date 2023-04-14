@@ -1,12 +1,15 @@
+import { observer } from 'mobx-react';
+import TrackPlayer, { State, usePlaybackState }  from 'react-native-track-player';
+import { ActivityIndicator } from 'react-native';
+import { isIOS } from '@/utils/fun';
+import { useStore } from '@/store';
 import { ContainerWrapper, IS_IPHONE_X, XPhoneWrapper,
 CardWrapper, CoverContainerWrapper, CoverImageWrapper,
 TextContainerWrapper, TitleWrapper, ControlWrapper, IconWrapper } from './Wrapper';
-import { isIOS } from '@/utils/fun';
-import TrackPlayer, { State, usePlaybackState }  from 'react-native-track-player';
-import { ActivityIndicator } from 'react-native';
 
-const Player = (props: any) => {
-    const { play:{ title, artwork, artist } } = props;
+const Player = () => {
+    const { rootStore } = useStore();
+    const { playTracks, playTrack } = rootStore.palyerStore;
     const playerState = usePlaybackState();
     const isPlay = playerState === State.Playing;
     let name = '';
@@ -19,21 +22,32 @@ const Player = (props: any) => {
         <ContainerWrapper>
             <CardWrapper>
                 <CoverContainerWrapper>
-                    { title &&
+                    { playTrack.artwork &&
                     <CoverImageWrapper
                         PlaceholderContent={<ActivityIndicator />}
-                        source={{ uri: artwork }} />
+                        source={{ uri: playTrack.artwork }} />
                         }
                 </CoverContainerWrapper>
                 <TextContainerWrapper>
-                    <TitleWrapper numberOfLines={2}>{ title }</TitleWrapper>
-                    <TitleWrapper numberOfLines={1} style={{fontSize:10}}>{ artist }</TitleWrapper>
+                    <TitleWrapper numberOfLines={2}>{ playTrack.title }</TitleWrapper>
+                    <TitleWrapper numberOfLines={1} style={{fontSize:10}}>{ playTrack.artist }</TitleWrapper>
                 </TextContainerWrapper>
                 <ControlWrapper>
                     <IconWrapper type="ionicon" reverse
                     name={isIOS ? 'play-skip-back' : 'md-skip-backward'} size={12}
                     color="#fff" reverseColor="#0EBDFC"
-                    onPress={props.back}
+                    onPress={async () => {
+                        if (isPlay) {
+                            await TrackPlayer.pause();
+                        }
+                        try {
+                            await TrackPlayer.skipToPrevious();
+                            TrackPlayer.play();
+                        } catch (_) {
+                            await TrackPlayer.skip(playTracks[playTracks.length - 1].id);
+                            TrackPlayer.play();
+                        }
+                    }}
                     />
                     <IconWrapper type="ionicon" reverse
                     name={name}
@@ -43,12 +57,23 @@ const Player = (props: any) => {
                     <IconWrapper type="ionicon" reverse
                     name={isIOS ? 'play-skip-forward' : 'md-skip-forward'} size={12}
                     color="#fff" reverseColor="#0EBDFC"
-                    onPress={props.forward}
+                    onPress={async ()=>{
+                        if (isPlay) {
+                            await TrackPlayer.pause();
+                        }
+                        try {
+                            await TrackPlayer.skipToNext();
+                            TrackPlayer.play();
+                        } catch (_) {
+                            await TrackPlayer.skip(playTracks[0].id);
+                            TrackPlayer.play();
+                        }
+                    }}
                     />
                     <IconWrapper containerStyle={{paddingHorizontal:10}} type="ionicon"
                     name={isIOS ? 'list' : 'md-list'} size={32}
                     color="#fff" underlayColor="#0EBDFC"
-                    onPress={props.showOverlay}
+                    onPress={()=>{}}
                     />
                 </ControlWrapper>
                 </CardWrapper>
@@ -57,4 +82,4 @@ const Player = (props: any) => {
     );
 };
 
-export default Player;
+export default observer(Player);

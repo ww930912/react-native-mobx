@@ -1,6 +1,6 @@
 import axios from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { setLoading } from '@/components/Loading';
+import { bLoading, setLoading } from '@/components/Loading';
 import { getScum, setScum, clearAll } from './auth';
 
 export interface TRequestInterceptors<T = AxiosResponse> {
@@ -32,7 +32,7 @@ class Http {
             setLoading(false);
             return Promise.resolve(JSON.parse(data));
         }
-        setLoading(true);
+        !bLoading.isLoading && setLoading(true);
         return new Promise((resolve, reject) => {
             if (config.interceptors?.requestInterceptor) {
                 config = config.interceptors.requestInterceptor(config);

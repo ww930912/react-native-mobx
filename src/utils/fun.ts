@@ -46,17 +46,13 @@ const getPageNo = async() => {
     console.log('pageNoList---', pageNoList);
     // 如果缓存的个数与分页总数一致
     if (pageNoList.length === PAGENOTOTAL){
-        console.log('总数一致，则清空');
         await removeData('pageNoList');
     }
     //包含，则重新随机; 不包含，存入缓存
     if (pageNoList.includes(pageNo)) {
-        console.log('包含，则重新随机');
         getPageNo();
     } else {
-        console.log('不包含，存入缓存');
         await saveData('pageNoList',[...pageNoList,pageNo]);
-        console.log(pageNo);
         return pageNo;
     }
 };
@@ -128,8 +124,9 @@ const arrToPlayTracks = (tracks) => {
             }
         }
         arr.push({
+          playtimes: e.playtimes,
           duration: e.duration,
-          id: e._id + '',
+          id: e._id,
           url: url,
           title: e.title,
           artist: e.artist,

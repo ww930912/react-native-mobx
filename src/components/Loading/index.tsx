@@ -2,7 +2,7 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { StyleSheet, View, Modal, ActivityIndicator } from 'react-native';
 
-const bLoading = observable({
+export const bLoading = observable({
   isLoading: false,
 });
 

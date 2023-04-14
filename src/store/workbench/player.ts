@@ -1,3 +1,4 @@
+import TrackPlayer, { State } from 'react-native-track-player';
 import {makeAutoObservable} from 'mobx';
 import { RootStoreProps } from '@/store/store';
 
@@ -10,17 +11,33 @@ class Player {
     makeAutoObservable(this, {}, { autoBind:
        true });
   }
-  setPlayTrack(index:number) {
-    this.playTrack = this.playTracks[index];
-    const newTracks = this.rootStore.detailStore.tracks; // note
-    newTracks.map((item:any, idx: number)=>{
-      if (index === idx) {
-        item.isPlay = !item.isPlay;
+
+  updateList(trackId:number, state: State) {
+    const newTracks = [...this.playTracks];
+    newTracks.map((item:any)=>{
+      if (trackId === item.id) {
+        item.select = state === State.Playing ? true : false;
       } else {
-        item.isPlay = false;
+        item.select = false;
       }
     });
-    this.rootStore.detailStore.tracks = newTracks; // note
+    this.playTracks = newTracks;
+  }
+
+  clearList() {
+    const newTracks = [...this.playTracks];
+    newTracks.map((item:any)=>{
+        item.select = false;
+    });
+    this.playTracks = newTracks;
+  }
+
+  async setPlayTrack(id:number) {
+    const playTrack = this.playTracks.find(e=> +e.id === id);
+    const playTrackIndex = this.playTracks.findIndex(e=> +e.id === id);
+    this.playTrack = playTrack;
+    await TrackPlayer.skip(playTrackIndex);
+    await TrackPlayer.play();
   }
 }
 

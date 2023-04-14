@@ -38,7 +38,7 @@ class Home {
     } else {
       pageNo = await getPageNo() as unknown as number;
     }
-    console.log('get-------', pageNo, 'title', this.searchText);
+    if (!pageNo) {return;}
     getAlbumList({pageNo, pageSize: 20, title: this.searchText}).then(res=>{
       const { success, data } = res.data;
       if (success) {

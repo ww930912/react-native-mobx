@@ -6,7 +6,6 @@ import { RootStoreProps } from '@/store/store';
 
 class Detail {
   album: any = null;
-  tracks: any[] = [];
   rootStore: RootStoreProps;
   constructor(rootStore: RootStoreProps) {
     this.rootStore = rootStore;
@@ -14,12 +13,10 @@ class Detail {
       true });
   }
   get(id: number, cb: Function) {
-    console.log('getDetail-------', id);
-    getAlbumById(id).then(res=>{
+    getAlbumById(id).then(async res=>{
       const { data } = res.data;
       let allTracks = data.tracks;
-        allTracks.map((e, i)=>{
-          e.isPlay = i === 0 ? true : false;
+        allTracks.map((e)=>{
           e.select = false;
           e.artist = data.uid && data.uid.nickname;
         });
@@ -29,13 +26,13 @@ class Detail {
         data.cover = `https://imagev2.xmcdn.com/${data.cover}!op_type=5&upload_type=album&device_type=ios&name=medium`;
       }
       this.album = data;
-      this.tracks = allTracks;
       // Note
       const playTracks = arrToPlayTracks(allTracks);
       this.rootStore.palyerStore.playTracks = playTracks;
       this.rootStore.palyerStore.playTrack = playTracks[0];
       //当前页面新增初始化播放信息
-      TrackPlayer.add(playTracks);
+      await TrackPlayer.reset();
+      await TrackPlayer.add(playTracks);
       cb && cb();
     })
     ;

@@ -2,7 +2,6 @@ import { observer } from 'mobx-react';
 import {globalNavigation} from '@/utils/navigation';
 import {useStore} from '@/store';
 import {ViewWrapper, ImageWrapper} from './Wrapper';
-import { setLoading } from '@/components/Loading';
 
 const Read = () => {
   const { rootStore } = useStore();
@@ -11,7 +10,6 @@ const Read = () => {
   return (
     <ViewWrapper
       onPress={() => {
-        setLoading(true);
         get(1, () => {
           globalNavigation.goTo('Detail', {id: 1});
         });
