@@ -9,7 +9,7 @@ const  TrackList = (props: any) => {
                 )=><ListItemWrapper key={index} bottomDivider onPress={()=>props.setPlayTrack(item.id)}>
                 <ListItemWrapper.Content>
                         <ListItemWrapper.Title numberOfLines={1} style={{ fontSize: 15,lineHeight: 18, width: 360 }}>{item.title}</ListItemWrapper.Title>
-                        <ListItemWrapper.Subtitle style={{ fontSize: 14, color: '#ccc', paddingTop: 6, width: 280 }}>播放时间：{secondToDate(item.duration)} ，播放累计：{secondToNum(item.playtimes)}次</ListItemWrapper.Subtitle>
+                        <ListItemWrapper.Subtitle style={{ fontSize: 14, color: '#ccc', paddingTop: 6, width: 280 }}>时间：{secondToDate(item.duration)} ，累计：{secondToNum(item.playtimes)}次</ListItemWrapper.Subtitle>
                 </ListItemWrapper.Content>
                 <ListItemChevron name="checkmark-circle" size={22} style={{marginLeft:90}} color={item.select ? '#0EBDFC' : '#ccc'}/>
             </ListItemWrapper>)}

@@ -31,7 +31,6 @@ class Detail {
       this.rootStore.palyerStore.playTracks = playTracks;
       this.rootStore.palyerStore.playTrack = playTracks[0];
       //当前页面新增初始化播放信息
-      await TrackPlayer.reset();
       await TrackPlayer.add(playTracks);
       cb && cb();
     })

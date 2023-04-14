@@ -13,13 +13,13 @@ import data from './data';
 
 const Weclome: FC<Partial<WelcomeProps>> = props => {
   const {navigation} = props;
-  const timeRef = useRef(5000);
+  const timeRef = useRef(2000);
   const imageUrl = useMemo(() => Math.ceil(Math.random() * 354 + 1), []);
   const book = useMemo(() => {
     const index = Math.ceil(Math.random() * data.length) - 1;
     const {title, author} = data[index];
     if (title.length > 40) {
-      timeRef.current = 10000;
+      timeRef.current = 4000;
     }
     return {title, author};
   }, []);
@@ -28,8 +28,8 @@ const Weclome: FC<Partial<WelcomeProps>> = props => {
     globalNavigation.setNavigation(navigation);
   }, [navigation]);
   useEffect(() => {
+    SplashScreen.hide();
     setTimeout(() => {
-      SplashScreen.hide();
       globalNavigation.resetToHomPage();
     }, timeRef.current);
   }, []);

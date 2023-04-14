@@ -11,7 +11,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@ptomasroos/react-native-multi-slider": "^2.2.2",
+    "@ptomasroos/react-native-multi-slider": "https://github.com/ptomasroos/react-native-multi-slider.git#38eb810",
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-native-masked-view/masked-view": "^0.2.9",
     "@react-navigation/bottom-tabs": "^6.5.7",
@@ -24,6 +24,7 @@
     "axios": "^1.3.5",
     "mobx": "^6.9.0",
     "mobx-react": "^7.6.0",
+    "reac": "^0.0.0",
     "react": "18.2.0",
     "react-native": "0.71.6",
     "react-native-gesture-handler": "^2.9.0",

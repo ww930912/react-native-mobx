@@ -1,20 +1,22 @@
+import React from 'react';
 import { ContainerWrapper, RuntimeWrapper, RuntimeLeftText,
     SeekBarWrapper, RuntimeRightText } from './Wrapper';
 import { runTime, endTime } from '@/utils/fun';
+import { useProgress } from 'react-native-track-player';
 
-const ProgressBar = (props: any) => {
-        const { playTrack, playProgress } = props;
+const ProgressBar = () => {
+    const { position, duration } = useProgress();
         return (
             <ContainerWrapper>
                 <RuntimeWrapper>
-                    <RuntimeLeftText>{runTime(playTrack.duration, playProgress)}</RuntimeLeftText>
+                    <RuntimeLeftText>{runTime(position)}</RuntimeLeftText>
                 </RuntimeWrapper>
                 <SeekBarWrapper/>
                 <RuntimeWrapper>
-                    <RuntimeRightText>{endTime(playTrack.duration, playProgress)}</RuntimeRightText>
+                    <RuntimeRightText>{endTime(duration, position)}</RuntimeRightText>
                 </RuntimeWrapper>
             </ContainerWrapper>
         );
 };
 
-export default ProgressBar;
+export default React.memo(ProgressBar);

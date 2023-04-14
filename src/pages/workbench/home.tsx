@@ -5,6 +5,7 @@ import {HomeProps} from '@/typings/workbench/home';
 import BlurBackground from '@/components/BlurBackground';
 import SearchBar from '@/components/SearchBar';
 import Read from '@/components/Read';
+import DouYin from '@/components/DouYin';
 import FooterIntro from '@/components/FooterIntro';
 import BookCase from '@/components/BookCase';
 import {useStore} from '@/store';
@@ -18,15 +19,13 @@ const HomeWrapper = styled.SafeAreaView`
 
 const Home: FC<Partial<HomeProps>> = () => {
   const { rootStore} = useStore();
-  const { blurImg, setBlurImg, addAlbumList, bookList, get, getConfig, isRead, setSearchText, setBeforeBookList } = rootStore.homeStore;
+  const { blurImg, setBlurImg, addAlbumList, bookList, get, getConfig, isRead,
+    setSearchText, setBeforeBookList, isDouYin } = rootStore.homeStore;
   const { updateList } = rootStore.palyerStore;
   const [ val, setVal ] = useState('');
   // 播放器回调
   const initPlayEvent = async() => {
     // 远程暂停播放
-    TrackPlayer.addEventListener(Event.RemoteStop, () => {
-        TrackPlayer.reset();
-    });
     TrackPlayer.addEventListener(Event.RemotePause, async() => {
       await TrackPlayer.pause();
       const trackIndex = await TrackPlayer.getCurrentTrack();
@@ -50,48 +49,42 @@ const Home: FC<Partial<HomeProps>> = () => {
         await TrackPlayer.play();
         track && updateList(track.id, State.Playing);
       }
-      console.log('播放状态---', state);
+      // console.log('播放状态---', state);
     });
 
     TrackPlayer.addEventListener(Event.RemoteNext, async() => {
-        console.log('前进---------home');
+        // console.log('前进---------home');
         try {
             await TrackPlayer.skipToNext();
         } catch (_) {
-            // const { playTracks } = this.props;
-            // await TrackPlayer.skip(playTracks[0].id);
+          await TrackPlayer.skip(0);
         }
+        await TrackPlayer.play();
     });
 
     TrackPlayer.addEventListener(Event.RemotePrevious, async() => {
-        console.log('后退---------home');
+        // console.log('后退---------home');
         try {
             await TrackPlayer.skipToPrevious();
         } catch (_) {
-            // const { playTracks } = this.props;
-            // await TrackPlayer.skip(playTracks[playTracks.length - 1].id);
+          const playTracks = await TrackPlayer.getQueue();
+          playTracks && playTracks.length > 0 && await TrackPlayer.skip(playTracks.length - 1);
         }
+        await TrackPlayer.play();
     });
 
+    TrackPlayer.addEventListener(Event.RemoteSeek, async (data) => {
+        await TrackPlayer.seekTo(data.position);
+    });
+
+    // TrackPlayer.addEventListener(Event.RemoteStop, () => {
+    //     TrackPlayer.reset();
+    // });
     // TrackPlayer.addEventListener(Event.PlaybackTrackChanged, async() => {
     //     const trackIndex = await TrackPlayer.getCurrentTrack();
     //     const track = await TrackPlayer.getTrack(trackIndex);
     //     track && updateList(+track.id);
     // });
-
-    TrackPlayer.addEventListener(Event.RemoteSeek, async (data) => {
-        await TrackPlayer.seekTo(data.position);
-        // const { playBack } = this.props;
-        // if (playBack === TrackPlayer. STATE_PAUSED) {
-        //     await TrackPlayer.pause();
-        // } else if (playBack == TrackPlayer.STATE_PLAYING) {
-        //     await TrackPlayer.pause();
-        //     this.time = setTimeout(async ()=>{
-        //         await TrackPlayer.play();
-        //         this.time && clearTimeout(this.time);
-        //     },100);
-        // }
-    });
   };
   // 初始化播放器
   const initPlayer =  async() => {
@@ -139,6 +132,7 @@ const Home: FC<Partial<HomeProps>> = () => {
         onClear={()=>setBeforeBookList()}
       />
       { isRead && <Read /> }
+      { isDouYin && <DouYin/> }
       <FooterIntro albums={getAlbumToChinese()} tracks={getTrackToChinese()} />
       <BookCase
         bookList={bookList}

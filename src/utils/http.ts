@@ -28,7 +28,7 @@ class Http {
         // 接口缓存
         const data = await getScum(config.url);
         if (data) {
-            console.log('cache----');
+            // console.log('cache----');
             setLoading(false);
             return Promise.resolve(JSON.parse(data));
         }
@@ -43,14 +43,15 @@ class Http {
                     if (config.interceptors?.responseInterceptor) {
                         res = config.interceptors.responseInterceptor(res);
                     }
-                    console.log('request---success----');
-                    !config.url.includes('getConfig') && setScum(config.url, JSON.stringify(res));
+                    // console.log('request---success----');
+                    // !config.url.includes('getConfig') && setScum(config.url, JSON.stringify(res));
+                    setScum(config.url, JSON.stringify(res));
                     setLoading(false);
                     resolve(res);
                     // clearAll();
                 })
                 .catch((err) => {
-                    console.log('err---', err);
+                    // console.log('err---', err);
                     setLoading(false);
                     reject(err);
                 });

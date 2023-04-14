@@ -17,17 +17,12 @@ class Player {
     newTracks.map((item:any)=>{
       if (trackId === item.id) {
         item.select = state === State.Playing ? true : false;
+        if (state === State.Playing) {
+          this.playTrack = item;
+        }
       } else {
         item.select = false;
       }
-    });
-    this.playTracks = newTracks;
-  }
-
-  clearList() {
-    const newTracks = [...this.playTracks];
-    newTracks.map((item:any)=>{
-        item.select = false;
     });
     this.playTracks = newTracks;
   }

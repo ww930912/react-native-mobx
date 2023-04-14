@@ -29,11 +29,11 @@ const getData = (key) => {
                   resolve(JSON.parse(result));
               } catch (e) {
                   reject(e);
-                  console.error(e);
+                //   console.error(e);
               }
           } else {
               reject(error);
-              console.error(error);
+            //   console.error(error);
           }
       });
   });
@@ -43,14 +43,14 @@ const getPageNo = async() => {
     //随机从1~分页总数里面取
     const pageNo = Math.floor(Math.random() * PAGENOTOTAL + 1) as unknown as never;
     const pageNoList = (await getData('pageNoList') || []) as unknown as [];
-    console.log('pageNoList---', pageNoList);
+    // console.log('pageNoList---', pageNoList);
     // 如果缓存的个数与分页总数一致
     if (pageNoList.length === PAGENOTOTAL){
         await removeData('pageNoList');
     }
     //包含，则重新随机; 不包含，存入缓存
     if (pageNoList.includes(pageNo)) {
-        getPageNo();
+        await getPageNo();
     } else {
         await saveData('pageNoList',[...pageNoList,pageNo]);
         return pageNo;
@@ -136,16 +136,15 @@ const arrToPlayTracks = (tracks) => {
     return arr;
 };
 
-const runTime = (duration, progress) => {
-    let seconds = Math.ceil(duration * progress);
-    if (isNaN(seconds)) {
+const runTime = (progress) => {
+    if (isNaN(progress)) {
         return '00:00';
     }
-    return secondToDate(seconds);
+    return secondToDate(progress);
 };
 
 const endTime = (duration, progress) => {
-    let seconds = Math.floor(duration * (1 - progress));
+    let seconds = duration - progress;
     if (isNaN(seconds)) {
         return '00:00';
     }

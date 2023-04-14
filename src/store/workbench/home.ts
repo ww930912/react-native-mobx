@@ -36,7 +36,7 @@ class Home {
         pageNo = this.searchPage;
       }
     } else {
-      pageNo = await getPageNo() as unknown as number;
+      pageNo = (await getPageNo() || 1) as unknown as number;
     }
     if (!pageNo) {return;}
     getAlbumList({pageNo, pageSize: 20, title: this.searchText}).then(res=>{

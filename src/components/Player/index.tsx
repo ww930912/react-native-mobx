@@ -37,16 +37,12 @@ const Player = () => {
                     name={isIOS ? 'play-skip-back' : 'md-skip-backward'} size={12}
                     color="#fff" reverseColor="#0EBDFC"
                     onPress={async () => {
-                        if (isPlay) {
-                            await TrackPlayer.pause();
-                        }
                         try {
                             await TrackPlayer.skipToPrevious();
-                            TrackPlayer.play();
                         } catch (_) {
-                            await TrackPlayer.skip(playTracks[playTracks.length - 1].id);
-                            TrackPlayer.play();
+                            playTracks && playTracks.length > 0 && await TrackPlayer.skip(playTracks.length - 1);
                         }
+                        await TrackPlayer.play();
                     }}
                     />
                     <IconWrapper type="ionicon" reverse
@@ -58,16 +54,12 @@ const Player = () => {
                     name={isIOS ? 'play-skip-forward' : 'md-skip-forward'} size={12}
                     color="#fff" reverseColor="#0EBDFC"
                     onPress={async ()=>{
-                        if (isPlay) {
-                            await TrackPlayer.pause();
-                        }
                         try {
                             await TrackPlayer.skipToNext();
-                            TrackPlayer.play();
                         } catch (_) {
-                            await TrackPlayer.skip(playTracks[0].id);
-                            TrackPlayer.play();
+                            await TrackPlayer.skip(0);
                         }
+                        await TrackPlayer.play();
                     }}
                     />
                     <IconWrapper containerStyle={{paddingHorizontal:10}} type="ionicon"

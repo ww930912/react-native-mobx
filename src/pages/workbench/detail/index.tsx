@@ -1,5 +1,5 @@
 
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import { ActivityIndicator } from 'react-native';
 import {observer} from 'mobx-react';
 import {useStore} from '@/store';
@@ -11,13 +11,22 @@ import NavBar from '@/components/NavBar';
 import TrackList from '@/components/TrackList';
 import Player from '@/components/Player';
 import ProgressBar from '@/components/ProgressBar';
+import TrackPlayer from 'react-native-track-player';
 
 
 const Detail: FC<Partial<DetailProps>> = () => {
   const {rootStore} = useStore();
   const { album } = rootStore.detailStore;
   const { playTrack, setPlayTrack, playTracks } = rootStore.palyerStore;
-
+  const destory = async () => {
+    await TrackPlayer.pause();
+    setTimeout(() => TrackPlayer.reset(), 1000);
+  };
+  useEffect(()=>{
+    return () => {
+      destory();
+    };
+  }, []);
   return (
     <MusicWrapper>
       <ParallaxHeader
@@ -44,7 +53,7 @@ const Detail: FC<Partial<DetailProps>> = () => {
       />
       { playTrack &&
               <PlayerWrapper>
-                  <ProgressBar playTrack={playTrack} playProgress={0}/>
+                  <ProgressBar/>
                   <Player />
               </PlayerWrapper>
             }
