@@ -14,7 +14,7 @@ const {
   height: SCREEN_HEIGHT,
 } = Dimensions.get('window');
 
-export const IS_IPHONE_X = SCREEN_HEIGHT === 812 || SCREEN_HEIGHT === 896;
+export const IS_IPHONE_X = SCREEN_HEIGHT >= 812;
 const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? (IS_IPHONE_X ? 44 : 20) : 0;
 export const NAV_BAR_HEIGHT = Platform.OS === 'ios' ? (IS_IPHONE_X ? 88 : 64) : 64;
 

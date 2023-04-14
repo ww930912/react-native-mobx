@@ -4,7 +4,7 @@ const {
 height: SCREEN_HEIGHT,
 } = Dimensions.get('window');
 
-const IS_IPHONE_X = SCREEN_HEIGHT === 812 || SCREEN_HEIGHT === 896;
+const IS_IPHONE_X = SCREEN_HEIGHT >= 812;
 const SHAKE_HEIGHT = Platform.OS === 'ios' ? (IS_IPHONE_X ? 104 : 80) : 110;
 
 export const ViewWrapper = styled.TouchableOpacity`

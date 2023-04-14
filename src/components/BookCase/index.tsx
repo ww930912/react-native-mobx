@@ -8,7 +8,7 @@ import {useStore} from '@/store';
 
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 
-const IS_IPHONE_X = SCREEN_HEIGHT === 812 || SCREEN_HEIGHT === 896;
+const IS_IPHONE_X = SCREEN_HEIGHT >= 812;
 const BOOK_HEIGHT = Platform.OS === 'ios' ? (IS_IPHONE_X ? 120 : 80) : 80;
 
 const BookCase = (props: any) => {

@@ -3,14 +3,14 @@ import { Dimensions } from 'react-native';
 import SeekBar from './../SeekBar';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-const IS_IPHONE_X = SCREEN_HEIGHT === 812 || SCREEN_HEIGHT === 896;
+const IS_IPHONE_X = SCREEN_HEIGHT >= 812;
 
 export const ContainerWrapper = styled.View`
     width: 100%;
     flex-direction: row;
     padding-horizontal: 10px;
     align-items: center;
-    height: ${IS_IPHONE_X ? '20px' : '1px5'}
+    height: ${IS_IPHONE_X ? '20px' : '1px'}
 `;
 
 export const SeekBarWrapper = styled(SeekBar)`
