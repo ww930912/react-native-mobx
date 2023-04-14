@@ -1,5 +1,7 @@
 import axios from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { setLoading } from '@/components/Loading';
+import { getScum, setScum, clearAll } from './auth';
 
 export interface TRequestInterceptors<T = AxiosResponse> {
     requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig
@@ -22,7 +24,15 @@ class Http {
     }
 
     // 单独传的拦截器
-    request<T>(config: TRequestConfig<T>): Promise<T> {
+    async request<T>(config: TRequestConfig<T>): Promise<T> {
+        // 接口缓存
+        const data = await getScum(config.url);
+        if (data) {
+            console.log('cache----');
+            setLoading(false);
+            return Promise.resolve(JSON.parse(data));
+        }
+        setLoading(true);
         return new Promise((resolve, reject) => {
             if (config.interceptors?.requestInterceptor) {
                 config = config.interceptors.requestInterceptor(config);
@@ -33,10 +43,15 @@ class Http {
                     if (config.interceptors?.responseInterceptor) {
                         res = config.interceptors.responseInterceptor(res);
                     }
+                    console.log('request---success----');
+                    !config.url.includes('getConfig') && setScum(config.url, JSON.stringify(res));
+                    setLoading(false);
                     resolve(res);
+                    // clearAll();
                 })
                 .catch((err) => {
                     console.log('err---', err);
+                    setLoading(false);
                     reject(err);
                 });
         });

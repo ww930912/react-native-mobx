@@ -10,6 +10,8 @@ import BookCase from '@/components/BookCase';
 import {useStore} from '@/store';
 import { getAlbumToChinese, getTrackToChinese } from '@/utils/fun';
 import TrackPlayer, { Capability, Event } from 'react-native-track-player';
+import Loading from '@/components/Loading';
+
 const HomeWrapper = styled.SafeAreaView`
   flex: 1;
 `;
@@ -152,6 +154,7 @@ const Home: FC<Partial<HomeProps>> = () => {
       />
       <FooterIntro albums={getAlbumToChinese()} tracks={getTrackToChinese()} />
       <Toast onRef={toast => (this.toast = toast)} /> */}
+      <Loading />
     </HomeWrapper>
   );
 };

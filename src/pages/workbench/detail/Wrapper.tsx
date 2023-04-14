@@ -16,7 +16,7 @@ export const PlayerWrapper = styled.View`
     position: absolute;
     width: 100%;
     background-color: #0EBDFC;
-    height: ${NAV_BAR_HEIGHT + (IS_IPHONE_X ? 20 : 10)};
+    height: ${NAV_BAR_HEIGHT + (IS_IPHONE_X ? 20 : 10)}px;
     bottom: 0;
     left: 0;
 `;

@@ -1,4 +1,4 @@
-import { clearAll, getStorage, setStorage, removeItem } from './storage';
+import { getStorage, setStorage, removeItem, clearStorage } from './storage';
 
 const userTokenKey = 'LG-USER-Token-';
 export const apiPrefix = 'LG-API-PREFIX';
@@ -11,7 +11,7 @@ const getScumKey = code => scumKey + code.toUpperCase();
 /**
  * 退出清理用户缓存
  */
-export const clearUser = async () => await clearAll();
+export const clearAll = async () => await clearStorage();
 
 /**
  * 获取用户token

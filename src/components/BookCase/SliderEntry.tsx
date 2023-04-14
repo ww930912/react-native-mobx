@@ -1,9 +1,14 @@
 import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
-import styles from './SliderEntryStyle';
+import { observer } from 'mobx-react';
 import {Image} from '@rneui/base';
 import {globalNavigation} from '@/utils/navigation';
+import {useStore} from '@/store';
+import styles from './SliderEntryStyle';
 
 const SliderEntry = (props: any) => {
+  const { rootStore } = useStore();
+  const { get } = rootStore.detailStore;
+
   const {
     data: {_id, title, showTagList, cover},
     even,
@@ -22,7 +27,9 @@ const SliderEntry = (props: any) => {
       activeOpacity={1}
       style={styles.slideInnerContainer}
       onPress={() => {
-        globalNavigation.goTo('Detail', {id: _id});
+        get(_id, () => {
+          globalNavigation.goTo('Detail', {id: _id});
+        });
       }}>
       <View style={styles.shadow} />
       <View
@@ -48,4 +55,4 @@ const SliderEntry = (props: any) => {
   );
 };
 
-export default SliderEntry;
+export default observer(SliderEntry);

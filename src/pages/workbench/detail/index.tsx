@@ -15,14 +15,14 @@ import Player from '@/components/Player';
 import ProgressBar from '@/components/ProgressBar';
 
 
-const Detail: FC<Partial<DetailProps>> = props => {
+const Detail: FC<Partial<DetailProps>> = () => {
   const {rootStore} = useStore();
-  const { get, album, tracks } = rootStore.detailStore;
+  const { album, tracks } = rootStore.detailStore;
   const { playTrack, setPlayTrack } = rootStore.palyerStore;
-  useEffect(() => {
-    const { params } = props.route;
-    get(params.id);
-  }, []);
+  // useEffect(() => {
+  //   const { params } = props.route;
+  //   get(params.id);
+  // }, []);
   // console.log('album-------', album);
   // console.log('tracks-------', tracks);
   return (

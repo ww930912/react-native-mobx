@@ -13,7 +13,7 @@ class Detail {
     makeAutoObservable(this, {}, { autoBind:
       true });
   }
-  get(id: number) {
+  get(id: number, cb: Function) {
     console.log('getDetail-------', id);
     getAlbumById(id).then(res=>{
       const { data } = res.data;
@@ -36,6 +36,7 @@ class Detail {
       this.rootStore.palyerStore.playTrack = playTracks[0];
       //当前页面新增初始化播放信息
       TrackPlayer.add(playTracks);
+      cb && cb();
     })
     ;
   }
