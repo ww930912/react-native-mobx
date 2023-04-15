@@ -13,13 +13,13 @@ import data from './data';
 
 const Weclome: FC<Partial<WelcomeProps>> = props => {
   const {navigation} = props;
-  const timeRef = useRef(2000);
+  const timeRef = useRef(3000);
   const imageUrl = useMemo(() => Math.ceil(Math.random() * 354 + 1), []);
   const book = useMemo(() => {
     const index = Math.ceil(Math.random() * data.length) - 1;
     const {title, author} = data[index];
     if (title.length > 40) {
-      timeRef.current = 4000;
+      timeRef.current = 5000;
     }
     return {title, author};
   }, []);

@@ -10,7 +10,7 @@ export const ContainerWrapper = styled.View`
     flex-direction: row;
     padding-horizontal: 10px;
     align-items: center;
-    height: ${IS_IPHONE_X ? '20px' : '1px'}
+    height: ${IS_IPHONE_X ? '20px' : '14px'}
 `;
 
 export const SeekBarWrapper = styled(SeekBar)`

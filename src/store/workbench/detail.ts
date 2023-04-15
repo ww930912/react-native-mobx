@@ -5,6 +5,7 @@ import { arrToPlayTracks } from '@/utils/fun';
 import { RootStoreProps } from '@/store/store';
 
 class Detail {
+
   album: any = null;
   rootStore: RootStoreProps;
   constructor(rootStore: RootStoreProps) {
